@@ -25,7 +25,7 @@ func genModelFile(render *template.Template, dbName, tableName string) {
 	if db.ConfIns.Prefix != "" {
 		tableName = tableName[len(db.ConfIns.Prefix):]
 	}
-	fileName := ConfIns.ModelFolder + strings.ToLower(tableName) + "Model.go"
+	fileName := ConfIns.ModelFolder + FormatCamelcase(tableName) + "Model.go"
 	_ = os.Remove(fileName)
 	f, err := os.Create(fileName)
 	if err != nil {
