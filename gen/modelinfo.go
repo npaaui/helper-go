@@ -61,9 +61,15 @@ func FormatCamelcase(str string) (formatStr string) {
 }
 
 func Tags(columnName string) template.HTML {
+	str := "`db:" + `"` + columnName + `"` +
+		" json:" + `"` + columnName
 
-	return template.HTML("`db:" + `"` + columnName + `"` +
-		" json:" + `"` + columnName + "\"`")
+	if columnName == "update_time" {
+		str += `"` + " xorm:" + `"updated`
+	}
+
+	str += "\"`"
+	return template.HTML(str)
 }
 
 func ExportColumn(columnName string) string {
