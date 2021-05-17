@@ -28,6 +28,6 @@ type MysqlConf struct {
 }
 
 func (c MysqlConf) GetDataSourceName() (dataSourceName string) {
-	dataSourceName = c.Username + ":" + c.Password + "@(" + c.Host + ")/" + c.Database + "?charset=utf8"
+	dataSourceName = c.Username + ":" + c.Password + "@(" + c.Host + ")/" + c.Database + "?charset=utf8&loc=Local"
 	return
 }

@@ -68,6 +68,10 @@ func Tags(columnName string) template.HTML {
 		str += `"` + " xorm:" + `"updated`
 	}
 
+	if columnName == "create_time" {
+		str += `"` + " xorm:" + `"created`
+	}
+
 	str += "\"`"
 	return template.HTML(str)
 }
