@@ -15,7 +15,7 @@ import (
 
 func genModelFile(render *template.Template, dbName, tableName string) {
 	tableSchema := make([]TableSchema, 0)
-	err := db.EngineIns.SQL(
+	err := db.GetDbEngineIns().SQL(
 		"show full columns from " + tableName + " from " + dbName).Find(&tableSchema)
 
 	if err != nil {
@@ -25,7 +25,7 @@ func genModelFile(render *template.Template, dbName, tableName string) {
 	if db.ConfIns.Prefix != "" {
 		tableName = tableName[len(db.ConfIns.Prefix):]
 	}
-	fileName := ConfIns.ModelFolder + FormatCamelcase(tableName) + "Model.go"
+	fileName := ConfIns.ModelFolder + tableName + "_model.go"
 	_ = os.Remove(fileName)
 	f, err := os.Create(fileName)
 	if err != nil {
@@ -86,7 +86,7 @@ func GenerateModelFile() {
 		}
 	} else {
 		getTablesNameSql := "show tables from " + ConfIns.DbName
-		tablaNames, err := db.EngineIns.QueryString(getTablesNameSql)
+		tablaNames, err := db.GetDbEngineIns().QueryString(getTablesNameSql)
 		if err != nil {
 			fmt.Println(err)
 		}

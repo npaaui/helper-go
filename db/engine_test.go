@@ -28,7 +28,7 @@ func TestGetDbEngine(t *testing.T) {
 	defer func() {
 		fmt.Println(recover())
 	}()
-	dbConf.InitDbEngine()
+	dbConf.InitDbConf()
 
 	user := User{}
 

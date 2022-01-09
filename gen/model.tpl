@@ -1,11 +1,11 @@
 package {{.PackageName}}
 {{$exportModelName := .ModelName | FormatCamelcase}}
 import (
-    . "business/common"
+    . "your_product_name/common"
 )
 
 /**{{range .TableSchema}}
- * {{.Field}} {{.Type | TypeConvert}} {{.Comment}} {{end}}
+"{{.Field}}": "{{.Type | TypeConvert}}", // {{.Comment}} {{end}}
  */
 
 type {{$exportModelName}} struct {
@@ -17,7 +17,7 @@ func New{{$exportModelName}}Model() *{{$exportModelName}} {
 }
 
 func (m *{{$exportModelName}}) Info() bool {
-	has, err := DbEngine.Get(m)
+	has, err := GetDbEngineIns().Get(m)
 	if err != nil {
 		panic(NewDbErr(err))
 	}
@@ -25,7 +25,7 @@ func (m *{{$exportModelName}}) Info() bool {
 }
 
 func (m *{{$exportModelName}}) Insert() int64 {
-	row, err := DbEngine.Insert(m)
+	row, err := GetDbEngineIns().Insert(m)
 	if err != nil {
 		panic(NewDbErr(err))
 	}
@@ -33,7 +33,7 @@ func (m *{{$exportModelName}}) Insert() int64 {
 }
 
 func (m *{{$exportModelName}}) Update(arg *{{$exportModelName}}) int64 {
-	row, err := DbEngine.Update(arg, m)
+	row, err := GetDbEngineIns().Update(arg, m)
 	if err != nil {
 		panic(NewDbErr(err))
 	}
@@ -41,15 +41,26 @@ func (m *{{$exportModelName}}) Update(arg *{{$exportModelName}}) int64 {
 }
 
 func (m *{{$exportModelName}}) Delete() int64 {
-	row, err := DbEngine.Delete(m)
+	row, err := GetDbEngineIns().Delete(m)
 	if err != nil {
 		panic(NewDbErr(err))
 	}
 	return row
 }
 
-{{range .TableSchema}}func (m *{{$exportModelName}}) Set{{.Field | FormatCamelcase}}(arg {{.Type | TypeConvert}}) *{{$exportModelName}} {
+{{range .TableSchema}}
+func (m *{{$exportModelName}}) Set{{.Field | FormatCamelcase}}(arg {{.Type | TypeConvert}}) *{{$exportModelName}} {
 	m.{{.Field | FormatCamelcase}} = arg
 	return m
 }
 {{end}}
+func (m {{$exportModelName}}) AsMapItf() MapItf {
+	return MapItf{ {{range .TableSchema}}
+        "{{.Field}}": m.{{.Field | FormatCamelcase}}, {{end}}
+	}
+}
+func (m {{$exportModelName}}) Translates() map[string]string {
+	return map[string]string{ {{range .TableSchema}}
+        "{{.Field}}": "{{.Comment}}", {{end}}
+	}
+}

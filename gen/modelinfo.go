@@ -152,7 +152,7 @@ func (m *ModelInfo) CheckFirstTable() string {
 		return tableNameSlice[0]
 	} else {
 		getTablesNameSql := "show tables from " + ConfIns.DbName
-		tablaNames, _ := db.EngineIns.QueryString(getTablesNameSql)
+		tablaNames, _ := db.GetDbEngineIns().QueryString(getTablesNameSql)
 		return tablaNames[0]["Tables_in_"+ConfIns.DbName]
 	}
 }

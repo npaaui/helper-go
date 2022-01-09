@@ -3,6 +3,7 @@ package db
 import (
 	"errors"
 	"fmt"
+	"sync"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -10,13 +11,13 @@ import (
 	"xorm.io/core"
 )
 
-var EngineIns *xorm.Engine
+var engineIns *xorm.Engine
+
+var SetDbEngineOnce sync.Once
 
 func GetDbEngineIns() *xorm.Engine {
-	if EngineIns == nil {
-		SetDbEngine()
-	}
-	return EngineIns
+	SetDbEngineOnce.Do(SetDbEngine)
+	return engineIns
 }
 
 func SetDbEngine() {
@@ -38,5 +39,5 @@ func SetDbEngine() {
 		DbEngine.SetTableMapper(tbMapper)
 	}
 
-	EngineIns = DbEngine
+	engineIns = DbEngine
 }

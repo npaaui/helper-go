@@ -12,9 +12,8 @@ type Conn interface {
 
 var ConfIns *Conf
 
-func (d *Conf) InitDbEngine() {
+func (d *Conf) InitDbConf() {
 	ConfIns = d
-	SetDbEngine()
 }
 
 /**
