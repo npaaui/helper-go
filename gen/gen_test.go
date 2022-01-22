@@ -15,20 +15,20 @@ func TestGenModelFile(t *testing.T) {
 	(&db.Conf{
 		DriverName:      "mysql",
 		ConnMaxLifetime: 86400,
-		Prefix:          "b_",
+		Prefix:          "m_",
 		Conn: db.MysqlConf{
 			Host:     "127.0.0.1",
-			Username: "alice",
-			Password: "npaauI2396",
-			Database: "business",
+			Username: "Username",
+			Password: "Password",
+			Database: "mall_goods",
 		},
-	}).InitDbEngine()
+	}).InitDbConf()
 
 	(&Conf{
-		ModelFolder: "model/",
+		ModelFolder: "./model/",
 		TplFile:     "model.tpl",
-		TableNames:  "user",
-		DbName:      "business",
+		TableNames:  "goods",
+		DbName:      "mall_goods",
 	}).InitGenConf()
 	GenerateModelFile()
 }
