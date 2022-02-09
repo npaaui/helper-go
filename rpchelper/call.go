@@ -3,6 +3,7 @@ package rpchelper
 import (
 	"context"
 
+	etcdC "github.com/rpcxio/rpcx-etcd/client"
 	"github.com/smallnest/rpcx/client"
 	"github.com/smallnest/rpcx/protocol"
 )
@@ -14,7 +15,7 @@ type Reply struct {
 }
 
 func CallService(service, method string, args interface{}) (*Reply, error) {
-	d, err := client.NewPeer2PeerDiscovery(GetServerAddr(service), "")
+	d, err := etcdC.NewEtcdDiscovery("mall", service, []string{"127.0.0.1:2379"}, true, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -36,14 +37,4 @@ func CallService(service, method string, args interface{}) (*Reply, error) {
 		return nil, err
 	}
 	return reply, nil
-}
-
-func GetServerAddr(service string) string {
-	switch service {
-	case "goods_service":
-		return "tcp@127.0.0.1:8071"
-	case "order_service":
-		return "tcp@127.0.0.1:8074"
-	}
-	return ""
 }

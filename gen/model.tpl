@@ -24,6 +24,14 @@ func (m *{{$exportModelName}}) Info() bool {
 	return has
 }
 
+func (m *{{$exportModelName}}) InfoAndMustCols(mustCol string) bool {
+	has, err := db.GetDbEngineIns().MustCols(mustCol).Get(m)
+	if err != nil {
+		panic(NewDbErr(err))
+	}
+	return has
+}
+
 func (m *{{$exportModelName}}) Insert() int64 {
 	row, err := GetDbEngineIns().Insert(m)
 	if err != nil {
